@@ -1,0 +1,44 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+		// ignore these lines for now
+		// just know that the variable 'color' will end up with a random value from the colors array
+		var colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+		var color = colors[Math.floor(Math.random()*colors.length)];
+
+		favorite = 'blue';
+
+		switch (color) {
+			case 'red':
+				console.log(color + " is the color of an apple.");
+				break;
+			case 'orange':
+				console.log(color + " is the color of an Oompa Loompa.");
+				break;
+			case 'yellow':
+				console.log(color + " is the color of a bannana.");
+				break;
+			case 'green':
+				console.log(color + " is the color of a watermelon.");
+				break;
+			case 'blue':
+				console.log(color + " is the color of the sky.");
+				break;
+			default :
+				console.log(color + " is a stupid color and not really acknowledged by sophisticated computers such as myself.");
+			}
+
+	    // todo: create a case statement that will handle every color except indigo and violet
+	    // todo: when a color is encountered log a message that tells the color, and an object of that color
+	    //       example: Blue is the color of the sky.
+
+	    // todo: create a default case that will catch indigo and violet
+	    // todo: for the default case, log: I do not know anything by that color.
+	    var message = (favorite == color) ? ("Yeah, your favorite color " + color + " was selected.") : ("Oops, " + color + " was selected & your favorite color is " + favorite);
+		console.log(message);
+	</script>
+</body>
+</html>
