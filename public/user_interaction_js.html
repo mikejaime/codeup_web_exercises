@@ -1,0 +1,35 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<script type="text/javascript">
+		// todo: Ask the user for their name.
+		//       Keep asking if an empty input is provided.
+		var input_name = prompt('What is your name?');
+
+		// verifies that the user has passed a string
+		while (input_name == null || input_name == ''){
+			input_name = prompt('What is your name?');
+		}
+
+		// todo: Show an alert message that welcomes the user based on their input.
+		alert('Hello ' + input_name);
+
+		// todo: Ask the user if they like pizza.
+		//       Based on their answer tell show a creative alert message.
+		var question1 = prompt(input_name + ", do you like pizza? (YES or NO)");
+
+		// verifies that the user has passed a string
+		while (question1 == null || question1 == ''){
+			question1 = prompt("I'm asking you a question, do you like pizza? (YES or NO)");
+		}
+
+		// converts input to uppercase
+		var pizzaInput = question1.toUpperCase();
+
+		var message = (pizzaInput == 'YES') ? "That's awesome " + input_name + " , pizza f'n rocks!": "That's because " + input_name + " = lame";
+		alert(message);
+	</script>
+</body>
+</html>
