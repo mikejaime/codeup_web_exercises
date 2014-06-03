@@ -2,11 +2,13 @@
 
 $filename = "data/address_book.csv";
 
-$address_book = [
-    ['The White House', '1600 Pennsylvania Avenue NW', 'Washington', 'DC', '20500'],
-    ['Marvel Comics', 'P.O. Box 1527', 'Long Island City', 'NY', '11101'],
-    ['LucasArts', 'P.O. Box 29901', 'San Francisco', 'CA', '94129-0901']
-];
+// $address_book = [
+//     ['The White House', '1600 Pennsylvania Avenue NW', 'Washington', 'DC', '20500'],
+//     ['Marvel Comics', 'P.O. Box 1527', 'Long Island City', 'NY', '11101'],
+//     ['LucasArts', 'P.O. Box 29901', 'San Francisco', 'CA', '94129-0901']
+// ];
+
+$address_book = [];
 
 function csv_output($address_book, $filename){
 	if (is_writable($filename)) {
@@ -16,8 +18,27 @@ function csv_output($address_book, $filename){
 		}
 		fclose($handle);
 	}
-	
 }
+
+function load_csv($filename) {
+	// if (is_readable($filename) && filesize($filename) > 0){
+		$handle = fopen($filename, 'r');
+		$address_book = [];
+		while(!feof($handle)) {
+			$row = fgetcsv($handle);
+    		if(is_array($row)) {
+    			$address_book[] = $row;
+    		}
+    	}
+    // }
+    fclose($handle); 
+    return $address_book;
+} 
+
+$address_book = load_csv($filename);
+
+
+print_r($address_book);
 
 csv_output($address_book, $filename);
 
@@ -66,6 +87,7 @@ if (!empty($_POST['name']) && !empty($_POST['address']) && !empty($_POST['city']
 				<? foreach ($fields as $value) : ?>
 				<td><?= $value ?></td>
 				<? endforeach; ?>
+				<!-- <td><a href=""></a></td> -->
 		</tr>
 		<? endforeach; ?>
 	</table>
