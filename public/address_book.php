@@ -1,125 +1,202 @@
 <?
 
-$filename = "data/address_book.csv";
+$addressBook = [];
+$errorMessage = '';
 
-// $address_book = [
-//     ['The White House', '1600 Pennsylvania Avenue NW', 'Washington', 'DC', '20500'],
-//     ['Marvel Comics', 'P.O. Box 1527', 'Long Island City', 'NY', '11101'],
-//     ['LucasArts', 'P.O. Box 29901', 'San Francisco', 'CA', '94129-0901']
-// ];
+class AddressDataStore {
 
-$address_book = [];
+    public $filename = '';
 
-function csv_output($address_book, $filename){
-	if (is_writable($filename)) {
-		$handle = fopen($filename, 'w');
-		foreach ($address_book as $fields) {
-			fputcsv($handle, $fields);
-		}
+    public function __construct($placeholder)
+    {
+    	$this->filename = $placeholder;
+    }
+
+    public function readAddressBook()
+    {
+        // Code to read file $this->filename
+        $addresses = [];
+
+        // read each line of CSV and add rows to addresses array
+        // todo
+        $handle = fopen($this->filename, 'r');	// this alows us to utilize attributes within the class
+        while (!feof($handle)) {				
+        	$row = fgetcsv($handle);				// assigns
+        	if (is_array($row)) {
+        		$addresses[] = $row;
+        	}
+        }
+        fclose($handle);
+        return $addresses;
+    }
+
+    public function writeAddressBook($addresses) 
+    {
+        if (is_writable($this->filename)) {
+			$handle = fopen($this->filename, 'w');
+			foreach ($addresses as $entry) {		// foreach $array as $entry
+				fputcsv($handle, $entry);				// convert $entry nested array to a csv line, adding to file
+			}
 		fclose($handle);
-	}
+		}
+    }
+
+    public function __destruct()
+    {
+    	echo "Class dismissed!";
+    }
 }
 
-function load_csv($filename) {
-	// if (is_readable($filename) && filesize($filename) > 0){
-		$handle = fopen($filename, 'r');
-		$address_book = [];
-		while(!feof($handle)) {
-			$row = fgetcsv($handle);
-    		if(is_array($row)) {
-    			$address_book[] = $row;
-    		}
-    	}
-    // }
-    fclose($handle); 
-    return $address_book;
-} 
+$ads = new AddressDataStore('data/address_book.csv');			// instantiates and assigning to variable
+//$ads->filename = 'data/address_book.csv';	// passes $filename a parameter
 
-$address_book = load_csv($filename);
+$addressBook = $ads->readAddressBook();
 
+if (!empty($_POST))
+{
+	// we must be trying to add a new address
+	if (!empty($_POST['name']) && !empty($_POST['address']) && !empty($_POST['city']) && !empty($_POST['state']) && !empty($_POST['zip']))
+	{
+		// validation success & writes the value to the array, 1 key at a time
+		$newAddress = [];
 
-print_r($address_book);
+		$newAddress['name'] = $_POST['name'];
+		$newAddress['address'] = $_POST['address'];
+		$newAddress['city'] = $_POST['city'];
+		$newAddress['state'] = $_POST['state'];
+		$newAddress['zip'] = $_POST['zip'];
+		if (empty($_POST['phone'])) {
+			$newAddress['phone'] = 'N/A';
+		} else {
+			$newAddress['phone'] = $_POST['phone'];
+		}
+		
+		
+		// push onto address book
+		$addressBook[] = $newAddress;
 
-csv_output($address_book, $filename);
-
-if (!empty($_POST['name']) && !empty($_POST['address']) && !empty($_POST['city']) && !empty($_POST['state']) && !empty($_POST['zip'])) {
-	
-	$new_address = [];
-	
-	$new_address['name'] = $_POST['name'];
-	$new_address['address'] = $_POST['address'];
-	$new_address['city'] = $_POST['city'];
-	$new_address['state'] = $_POST['state'];
-	$new_address['zip'] = $_POST['zip'];
-	$new_address['phone'] = $_POST['phone'];
-
-	array_push($address_book, $new_address);
-	csv_output($address_book, $filename);
-
-} else {
-	foreach ($_POST as $key => $value) {
-		if (empty($value)){
-			echo "<h3> The " . ucfirst($key) .  " field is empty, please input a valid " . ucfirst($key) . "</h3>";
+		// save the address book
+		$ads->writeAddressBook($addressBook);
+	}
+	else
+	{
+		// validation failed
+		foreach ($_POST as $key => $value) {
+			if (empty($value)){
+				echo "<h3> The " . ucfirst($key) .  " field was left empty, please input a valid " . ucfirst($key) . "</h3>";
+			}
 		}
 	}
 }
 
+// Verify there were uploaded files and no errors
+if (count($_FILES) > 0 && $_FILES['file1']['error'] == 0) {
 
+    if ($_FILES['file1']["type"] != "text/csv") {
+        echo "ERROR: file must be in text/csv!";
+    } else {
+        // Set the destination directory for uploads
+        // Grab the filename from the uploaded file by using basename
+        $upload_dir = '/vagrant/sites/codeup.dev/public/uploads/';
+        $uploadFilename = basename($_FILES['file1']['name']);
+        // Create the saved filename using the file's original name and our upload directory
+        $saved_filename = $upload_dir . $uploadFilename;
+        // Move the file from the temp location to our uploads directory
+        move_uploaded_file($_FILES['file1']['tmp_name'], $saved_filename);
 
+        // load the new todos
+        // merge with existing list
+        $upload = new AddressDataStore($saved_filename);
+        $addresses_uploaded = $upload->readAddressBook();
+        $addressBook = array_merge($addressBook, $addresses_uploaded);
+        $ads->writeAddressBook($addressBook);
+    }
+}
 ?>
+<!DOCTYPE html>
 <html>
-<head>
-	<title></title>
-</head>
-<body>
-	<!-- from to receive user information -->
-	<table>
-		<tr>
-			<th>Name</th>
-			<th>Address</th>
-			<th>City</th>
-			<th>State</th>
-			<th>Zip</th>
-			<th>Phone</th>
-		</tr>
-		<? foreach ($address_book as $fields) : ?>
-		<tr>
-				<? foreach ($fields as $value) : ?>
-				<td><?= $value ?></td>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Address Book</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<h1>Address Book</h1>
+		<? if (!empty($errorMessage)) : ?>
+			<p><?=$errorMessage;?></p>
+		<? endif; ?>
+		<p>
+			<table>
+				<tr>
+					<th>Name</th>
+					<th>Address</th>
+					<th>City</th>
+					<th>State</th>
+					<th>Zip</th>
+					<th>Phone</th>
+				</tr>
+				<? foreach ($addressBook as $index => $row) : ?>
+
+					<tr>
+						<? foreach ($row as $column) : ?>
+
+							<td><?=$column;?></td>
+
+						<? endforeach; ?>
+					</tr>
+
 				<? endforeach; ?>
-				<!-- <td><a href=""></a></td> -->
-		</tr>
-		<? endforeach; ?>
-	</table>
-	<form method="POST" action="/address_book.php">
-        <p>
-            <label for="name">Name:</label>
-            <input id="name" name="name" method="post" type="text" placeholder="required">
-        </p>
-        <p>
-            <label for="address">Address:</label>
-            <input id="address" name="address" type="text" placeholder="required">
-        </p>
-        <p>
-            <label for="city">City:</label>
-            <input id="city" name="city" type="text" placeholder="required">
-        </p>
-        <p>
-            <label for="state">State:</label>
-            <input id="state" name="state" type="text" placeholder="required">
-        </p>
-        <p>
-            <label for="zip">Zip:</label>
-            <input id="zip" name="zip" type="text" placeholder="required">
-        </p>
-        <p>
-            <label for="phone">Phone:</label>
-            <input id="phone" name="phone" type="text" placeholder="***-***-***">
-        </p>
-        <p>
-            <input type="submit" value="submit">
-        </p>
-    </form>
-    
-</body>
+			</table>
+		</p>
+
+		<p>
+			<form action="address_book.php" method="POST">
+				<p>
+					<label for="name">Name</label>
+					<input type="text" name="name" id="name" placeholder='required'>
+				</p>
+				<p>
+					<label for="address">Address</label>
+					<input type="text" name="address" id="address" placeholder='required'>
+				</p>
+				<p>
+					<label for="city">City</label>
+					<input type="text" name="city" id="city" placeholder='required'>
+				</p>
+				<p>
+					<label for="state">State</label>
+					<input type="text" name="state" id="state" placeholder='required'>
+				</p>
+				<p>
+					<label for="zip">Zip</label>
+					<input type="text" name="zip" id="zip" placeholder='required'>
+				</p>
+				<p>
+					<label for="phone">Phone</label>
+					<input type="text" name="phone" id="phone">
+				</p>
+
+				<!-- todo add the other fields -->
+
+				<input type="submit">
+
+			</form>
+		</p>
+		<h1>Upload a File:</h1>
+		    <form method="POST" enctype="multipart/form-data" action="address_book.php">
+			    <p>
+			        <label for="file1"></label>
+			        <input type="file" id="file1" name="file1">
+			    </p>
+			    <p>
+			        <input type="submit" value="upload">
+			    </p>
+			</form>
+	</body>
 </html>
+<? 
+// destroy ads class/object
+unset($ads);
+?>
