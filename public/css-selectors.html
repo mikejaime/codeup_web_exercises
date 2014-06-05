@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <title>Selectors Exercise</title>
+    <link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <style>
+
+      /* selector for id="container" */
+      p {
+        color: #6E7476;
+      }
+
+      #container {
+        margin: 50px auto;
+        width: 500px;
+        padding: 10px;
+      }
+
+      /* 
+        selector for all "h1" elements
+        that are a descendent of id="container"
+        and have a class of "fancy-header"
+        */
+      #container h1.fancy-header {
+        color: #6E7476;
+        font-family: 'Raleway', sans-serif;
+        
+      }
+
+      /* selector for all "em" elements */
+      em {
+        font-weight: bold;
+      }
+
+      /* selector for all elements with class="article" */
+      .article {
+        clear:both;
+      }
+
+      a {
+        color: #00C1FF;
+        opacity: 0.4;
+        text-decoration: none;
+
+        -webkit-transition: opacity 0.25s;
+      }
+
+      a:hover {
+        transition: 0.75s ease;
+        opacity: 1;
+      }
+
+      /* 
+        selector for all "anchor" elements
+        that are a direct child of an element with class="article" 
+        */
+      .article>a {
+        float:right;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <section class="article">
+        <h1 class="fancy-header">Heading One</h1>
+        <p class="">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut <em>aliquip</em> ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <a href="">Read More</a>
+      </section>
+      <section class="article">
+        <h1 class="fancy-header">Heading Two</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur <em>adipisicing</em> elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <a href="">Read More</a>
+      </section>
+    </div>
+  </body>
+</html>
