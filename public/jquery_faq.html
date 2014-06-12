@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+		.invisible {
+			display: none;
+		}
+	</style>
+	<script src="/js/jquery-2.1.1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#toggling').click(function(event) {
+                $('dd').toggle();
+            });
+        	$('ul').each(function() {
+        		$(this).children().first().css('font-weight', 'bold');
+        	})
+        	$('li').click(function(event) {
+        		$(this).parent().hide();
+            });
+        	$('h3').click(function(event) {
+        		$(this).next().toggle();
+            });
+        });
+    </script>
+</head>
+<body>
+	<div>
+		<h1>FAQ's</h1>
+		<dl class="FAQ">
+			<dt>What are the rules pertaining to alcohol in a national park?</dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+			<dt>Does your site have any information on bicycling in national parks?</dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+			<dt>May I build a campfire in a national park? </dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+			<dt>What is required to bring horses into the parks? </dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+			<dt>Where is fee information for individual parks located?</dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+			<dt>May I carry my gun into a state park when I am traveling?</dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+			<dt>Where can I find information on hiking at National Parks?</dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+			<dt>Can I view a map of a specific State Park so I can become famidtar with the park layout before I get there?</dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+			<dt>Can you send me information on Big Bend National and other National Parks?</dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+			<dt>What do I need to know if I want to take a dog to a state park?</dt>
+				<dd class="invisible">Just visit our park and stop asking questions, jk.</dd>
+		</dl>
+		<a href="#" id="toggling">Click to toggle the answers of this FAQ page</a>
+	</div>
+	<h1>Parks List</h1>
+    <h3>Yellowstone</h3>
+	    <ul>
+	     	<li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	    </ul>
+    <h3>Badlands</h3>
+	    <ul>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	    </ul>
+     <h3>Death Valley</h3>
+	    <ul>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun Caverns</li>
+	        <li>Lorem Ipsun</li>
+	        <li>Lorem Ipsun</li>
+	    </ul>
+</body>
+</html>
