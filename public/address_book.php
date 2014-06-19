@@ -3,54 +3,12 @@
 $addressBook = [];
 $errorMessage = '';
 
-class AddressDataStore {
+require_once('classes/address_data_store.php');
 
-    public $filename = '';
-
-    public function __construct($placeholder)
-    {
-    	$this->filename = $placeholder;
-    }
-
-    public function readAddressBook()
-    {
-        // Code to read file $this->filename
-        $addresses = [];
-
-        // read each line of CSV and add rows to addresses array
-        // todo
-        $handle = fopen($this->filename, 'r');	// this alows us to utilize attributes within the class
-        while (!feof($handle)) {				
-        	$row = fgetcsv($handle);				// assigns
-        	if (is_array($row)) {
-        		$addresses[] = $row;
-        	}
-        }
-        fclose($handle);
-        return $addresses;
-    }
-
-    public function writeAddressBook($addresses) 
-    {
-        if (is_writable($this->filename)) {
-			$handle = fopen($this->filename, 'w');
-			foreach ($addresses as $entry) {		// foreach $array as $entry
-				fputcsv($handle, $entry);				// convert $entry nested array to a csv line, adding to file
-			}
-		fclose($handle);
-		}
-    }
-
-    public function __destruct()
-    {
-    	echo "Class dismissed!";
-    }
-}
-
-$ads = new AddressDataStore('data/address_book.csv');			// instantiates and assigning to variable
+$ads = new Filestore('data/address_book.csv');			// instantiates and assigning to variable
 //$ads->filename = 'data/address_book.csv';	// passes $filename a parameter
 
-$addressBook = $ads->readAddressBook();
+$addressBook = $ads->read_csv();
 
 if (!empty($_POST))
 {
@@ -76,7 +34,7 @@ if (!empty($_POST))
 		$addressBook[] = $newAddress;
 
 		// save the address book
-		$ads->writeAddressBook($addressBook);
+		$ads->write_csv($addressBook);
 	}
 	else
 	{
@@ -107,11 +65,21 @@ if (count($_FILES) > 0 && $_FILES['file1']['error'] == 0) {
         // load the new todos
         // merge with existing list
         $upload = new AddressDataStore($saved_filename);
-        $addresses_uploaded = $upload->readAddressBook();
+        $addresses_uploaded = $upload->read_csv();
         $addressBook = array_merge($addressBook, $addresses_uploaded);
-        $ads->writeAddressBook($addressBook);
+        $ads->write_csv($addressBook);
     }
 }
+
+// Remove
+if (isset($_GET['id'])) {
+	$remove_index = $_GET['id'];
+	unset($addressBook[$remove_index]);
+	$ads->write_csv($addressBook);
+	header('Location: /adress_book.php');
+	exit(0);
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -136,15 +104,16 @@ if (count($_FILES) > 0 && $_FILES['file1']['error'] == 0) {
 					<th>State</th>
 					<th>Zip</th>
 					<th>Phone</th>
+					<th>Remove</th>
 				</tr>
 				<? foreach ($addressBook as $index => $row) : ?>
 
 					<tr>
 						<? foreach ($row as $column) : ?>
-
 							<td><?=$column;?></td>
 
 						<? endforeach; ?>
+						<td><?= "<a href='?id=$index'>remove entry</a>"; ?></td>
 					</tr>
 
 				<? endforeach; ?>
