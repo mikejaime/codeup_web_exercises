@@ -8,7 +8,7 @@ require_once('classes/address_data_store.php');
 $ads = new Filestore('data/address_book.csv');			// instantiates and assigning to variable
 //$ads->filename = 'data/address_book.csv';	// passes $filename a parameter
 
-$addressBook = $ads->read_csv();
+$addressBook = $ads->read();
 
 if (!empty($_POST))
 {
@@ -34,7 +34,7 @@ if (!empty($_POST))
 		$addressBook[] = $newAddress;
 
 		// save the address book
-		$ads->write_csv($addressBook);
+		$ads->write($addressBook);
 	}
 	else
 	{
@@ -65,9 +65,9 @@ if (count($_FILES) > 0 && $_FILES['file1']['error'] == 0) {
         // load the new todos
         // merge with existing list
         $upload = new AddressDataStore($saved_filename);
-        $addresses_uploaded = $upload->read_csv();
+        $addresses_uploaded = $upload->read();
         $addressBook = array_merge($addressBook, $addresses_uploaded);
-        $ads->write_csv($addressBook);
+        $ads->write($addressBook);
     }
 }
 
@@ -75,7 +75,7 @@ if (count($_FILES) > 0 && $_FILES['file1']['error'] == 0) {
 if (isset($_GET['id'])) {
 	$remove_index = $_GET['id'];
 	unset($addressBook[$remove_index]);
-	$ads->write_csv($addressBook);
+	$ads->write($addressBook);
 	header('Location: /adress_book.php');
 	exit(0);
 }
