@@ -1,0 +1,39 @@
+body {
+	background-image: url('/img/james-background-2.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	min-height: 815px;
+	height: 100%;
+	width: 100%;
+	background-color: #e4e0e0;
+	background-position:center;
+}
+
+.scoreboard {
+	width: 100px;
+	height: 30px;
+	margin: auto;
+	margin-top: 50px;
+	position: relative;
+}
+
+.main {
+	width: 606px;
+	height: 606px;
+	border: 1px solid gray;
+	margin: auto;
+	position: relative;
+}
+
+.main>div {
+	width: 200px;
+	height: 200px;
+	border: 1px solid gray;
+    float: left;
+}
+
+.boxPic {
+	display: none;
+}
