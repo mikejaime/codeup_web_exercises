@@ -1,5 +1,6 @@
 <?php
 
+//result limit per page
 $limit = 4;
 
 function getOffset($limit) {
