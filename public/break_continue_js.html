@@ -1,0 +1,32 @@
+<html>
+<head>
+	<title>RANDOM ODD NUMBER EXERCISE</title>
+</head>
+<body>
+	<script type="text/javascript">
+		// js random function
+		var ran_num = Math.floor((Math.random()*50)+1);
+
+		// loop while ran number is not odd
+		while (ran_num % 2 == 0) {
+			ran_num = Math.floor((Math.random()*50)+1);
+		}
+		// log random odd number
+		console.log("Random Odd Number to skip is: " + ran_num);
+		// log only odd numbers
+		for (var i = 1; i < 50; i++) {
+			// continue/skip when number is even
+			if (i % 2 == 0){
+				continue;
+			// log random number
+			} else if (i == ran_num) {
+				console.log("Yipes! Skipping number: " + i);
+				continue;
+			// log all other odd numbers
+			} else {
+				console.log("Here is an odd number: " + i);
+			}
+		}
+	</script>
+</body>
+</html>
